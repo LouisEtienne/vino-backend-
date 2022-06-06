@@ -28,8 +28,8 @@ class Requete
         $this->url_elements = explode('/', $_GET['url']);
         $this->traitementParametre();
         
-        $this->ressource = $this->url_elements[0];
-        array_splice($this->url_elements,0,1);
+        $this->ressource = $this->url_elements;
+        // array_splice($this->url_elements,0,1);
 	}
 
 	/**

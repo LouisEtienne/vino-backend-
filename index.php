@@ -40,8 +40,27 @@ if($_SERVER['REQUEST_METHOD'] == 'OPTIONS')
 		http_response_code(400);
 		exit();
 	}
+
 	
-	$nomControlleur = ucfirst($oReq->ressource) . 'Controlleur';
+	if(isset($oReq->ressource[1])){
+		$nomControlleur = ucfirst($oReq->ressource[1]) . 'Controlleur';
+	} else {
+		$nomControlleur = ucfirst($oReq->ressource[0]) . 'Controlleur';
+	}
+
+
+
+	// if(isset($requete->ressource[0]) && !is_numeric($requete->ressource[0])){
+	// 	$nomControlleur = ucfirst($oReq->ressource[0]) . 'Controlleur';
+	// } else if((isset($requete->ressource[0]) && is_numeric($requete->ressource[0]))
+	// 			&& (isset($requete->ressource[1]) && !is_numeric($requete->ressource[1]))
+	// 			&&	(isset($requete->ressource[2]) && is_numeric($requete->ressource[2]))
+	// 			&&	(isset($requete->ressource[3]) && is_numeric($requete->ressource[3]))
+	// 		) {
+	// 	$nomControlleur = ucfirst($oReq->ressource[1]) . 'Controlleur';
+	// } else if(isset($requete->ressource[1]) && !is_numeric($requete->ressource[1])){
+	// 	$nomControlleur = ucfirst($oReq->ressource[1]) . 'Controlleur';
+	// }
 	
 	if (class_exists($nomControlleur)) {
 		

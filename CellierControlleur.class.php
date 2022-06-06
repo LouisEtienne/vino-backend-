@@ -11,7 +11,7 @@
  */
 
   
-class BouteilleControlleur 
+class CellierControlleur 
 {
 	private $retour = array('data'=>array());
 
@@ -22,7 +22,7 @@ class BouteilleControlleur
 	 */
 	public function getAction(Requete $requete)
 	{
-		if(isset($requete->url_elements[0]) && is_numeric($requete->url_elements[0]))	// Normalement l'id du cellier
+		if(isset($requete->url_elements[0]) && is_numeric($requete->url_elements[0]))	// Normalement l'id du cellier     
 		{
 			$id_cellier = (int)$requete->url_elements[0];//l'id du cellier
 			
@@ -31,26 +31,8 @@ class BouteilleControlleur
 				switch($requete->url_elements[1])
 				{
 					case 'cellier':
-						$this->retour["data"] = $this->getBouteilles2($id_cellier);
-
-						// $id_user = $this->getCurrentUserId();
-						// $this->retour["data"] = $this->ajouterCellier($id_bouteille, $id_user);
-						if(isset($requete->url_elements[2]) && is_numeric($requete->url_elements[2]))	// Normalement (l'id de la bouteille***) dans le cellier
-						{
-							$id_bouteille = (int)$requete->url_elements[2];//l'id de la bouteille
-							if(isset($requete->url_elements[3])){//La bouteille
-								switch($requete->url_elements[3])
-								{
-									case 'bouteille':
-										$this->retour["data"] = $this->ajouterQuantiteBouteille($id_bouteille,$id_cellier,1);//Pour le premier exemple nous utilisons l'id du cellier 1 et l'id du user 1
-										break;
-									default:
-										$this->retour['erreur'] = $this->erreur(400);
-										unset($this->retour['data']);
-										break;
-								}
-							}
-						}
+						//Va chercher  les bouteilles d'un cellier précis
+						$this->retour["data"] = $this->getBouteillesCellier($id_cellier);
 						break;
 					default:
 						$this->retour['erreur'] = $this->erreur(400);
@@ -67,7 +49,7 @@ class BouteilleControlleur
 		{
 			// $this->retour["data"] = $this->ajouterQuantiteBouteille(1,10,1);//Pour le premier exemple nous utilisons l'id du cellier 1 et l'id du user 1
 			$this->retour["data"] = $this->getBouteilles();
-			
+			// 
 		}
 
         return $this->retour;		
@@ -153,23 +135,15 @@ class BouteilleControlleur
 				{
 					switch($requete->url_elements[1]) 
 					{
-						case 'bouteille':
-							// $this->retour["data"] = $this->ajouterUnCommentaire($id_biere, $requete->parametres);
-							break;
-						case 'note':
-							// $this->retour["data"] = $this->ajouterUneNote($id_biere, $requete->parametres);
-							break;
 						case 'cellier':
-							$id_user = $this->getCurrentUserId();
-							$this->retour["data"] = $this->ajouterCellier($id_cellier, $id_user);
 							if(isset($requete->url_elements[2]) && is_numeric($requete->url_elements[2]))	// Normalement (l'id de la bouteille***) dans le cellier
 							{
-								$id_bouteille = (int)$requete->url_elements[2];
-								if(isset($requete->url_elements[3])){
-									switch($requete->url_elements[3]) 
+								$id_bouteille = (int)$requete->url_elements[2];//l'id de la bouteille
+								if(isset($requete->url_elements[3])){//La bouteille
+									switch($requete->url_elements[3])
 									{
 										case 'bouteille':
-											$this->retour["data"] = $this->ajouterQuantiteBouteille($id_bouteille,1,1);//Pour le premier exemple nous utilisons l'id du cellier 1 et l'id du user 1
+											$this->retour["data"] = $this->ajouterQuantiteBouteille($id_bouteille,$id_cellier);//Pour le premier exemple nous utilisons l'id du cellier 1 et l'id du user 1
 											break;
 										default:
 											$this->retour['erreur'] = $this->erreur(400);
@@ -194,7 +168,8 @@ class BouteilleControlleur
 			} 
 			else 
 			{
-				$this->retour["data"] = $this->ajouterUneBiere($requete->parametres);
+				// $this->retour["data"] = $this->ajouterUneBiere($requete->parametres);
+				// $this->retour["data"] = $requete->url_elements;
 				
 			}
 		// }
@@ -229,14 +204,14 @@ class BouteilleControlleur
 // 	$data['quantite'] = $oBouteille->getQuantite($id_cellier,$id_bouteille); 	
 // 	return $data['quantite'];
 // }
-public function ajouterQuantiteBouteille($id_bouteille, $id_cellier, $nombre){
-	$data = [];
+public function ajouterQuantiteBouteille($id_bouteille, $id_cellier){
+
 	$oBouteille = new Bouteille;
 	// $oBouteille->modifierQuantiteBouteilleCellier($id_cellier,$id_bouteille,$id_user,1);
-	$oBouteille->modifierQuantiteBouteilleCellier($id_cellier,$id_bouteille,1);
+	$oBouteille->modifierQuantiteBouteilleCellier($id_cellier,$id_bouteille, 1);
 	// $data['quantite'] = $oBouteille->getQuantite($id_cellier,$id_bouteille,$id_user); 
 	
-	return $this->getBouteilles($id_cellier);
+	return $this->getBouteilles();
 }
 
 // $body = json_decode(file_get_contents('php://input'));
@@ -596,11 +571,11 @@ public function ajouterCellier($id_user){
 	 * @return Array Les informations sur toutes les bières
 	 * @access private
 	 */	
-	private function getBouteilles2($id_cellier)
+	private function getBouteillesCellier($id_cellier)
 	{
 		$res = Array();
-		$oVino = new Bouteille();
-		$res = $oVino->getListeBouteilleCellier($id_cellier);
+		$oVino = new Cellier();
+		$res = $oVino->getListeBouteillesCellier($id_cellier);
 		
 		return $res; 
 	}
@@ -615,7 +590,7 @@ public function ajouterCellier($id_user){
 	private function getBouteilles() 
 	{
 		$res = Array();
-		$oVino = new Bouteille();
+		$oVino = new Cellier();
 		$res = $oVino->getListeBouteilleCellier();
 		
 		return $res; 

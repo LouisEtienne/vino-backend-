@@ -10,7 +10,7 @@
  * @license http://creativecommons.org/licenses/by-nc/3.0/deed.fr
  * 
  */
-class Bouteille extends Modele {
+class Cellier extends Modele {
 	const TABLE = 'vino__bouteille';
     
 	public function getListeBouteille()
@@ -77,7 +77,7 @@ class Bouteille extends Modele {
 		return $rows;
 	}
 	
-	public function getListeBouteilleCellier2($id_cellier)
+	public function getListeBouteillesCellier($id_cellier)
 	{
 		
 		$rows = Array();
@@ -102,7 +102,7 @@ class Bouteille extends Modele {
 						from vino__cellier c 
 						INNER JOIN vino__bouteille b ON c.id_bouteille = b.id
 						INNER JOIN vino__type t ON t.id = b.type
-						WHERE id_bouteille_cellier = '. $id_cellier;
+						WHERE c.id = '. $id_cellier;
 		if(($res = $this->_db->query($requete)) ==	 true)
 		{
 			if($res->num_rows)

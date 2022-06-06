@@ -28,6 +28,13 @@ class Usager extends Modele {
 		}
 		return $res;
 	}
+
+	public function getCellierUserId(){
+		return get_current_user();//A implementer pour retourner l'id de l'utilisateur choisis*******************************************A FAIRE
+	}
+	public function getCurrentUserId(){
+		return get_current_user();//A implementer pour retourner l'id de l'utilisaateur courant*******************************************A FAIRE
+	}
 	
 	/**
 	 * Ajoute un usager
